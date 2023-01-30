@@ -3,7 +3,6 @@
 Dataset containing news from Northern Jutland in Denmark.
 
 ______________________________________________________________________
-[![PyPI Status](https://badge.fury.io/py/NordjyllandNews.svg)](https://pypi.org/project/nordjylland_news/)
 [![Documentation](https://img.shields.io/badge/docs-passing-green)](https://alexandrainst.github.io/NordjyllandNews/nordjylland_news.html)
 [![License](https://img.shields.io/github/license/alexandrainst/NordjyllandNews)](https://github.com/alexandrainst/NordjyllandNews/blob/main/LICENSE)
 [![LastCommit](https://img.shields.io/github/last-commit/alexandrainst/NordjyllandNews)](https://github.com/alexandrainst/NordjyllandNews/commits/main)
