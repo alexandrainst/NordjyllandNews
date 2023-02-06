@@ -1,6 +1,6 @@
 import argparse
 
-from src.scripts.summary_data_set import SummaryDataSetBuilder
+from nordjylland_news.summary_data_set import SummaryDataSetBuilder
 
 
 def main():

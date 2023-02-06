@@ -3,8 +3,8 @@ import time
 
 import requests
 
-from src.scripts.constants import HEADERS, MAX_PER_PAGE, RAW_DATA_PATH
-from src.scripts.utils import append_jsonl, html_to_text, init_jsonl, load_jsonl
+from nordjylland_news.constants import HEADERS, MAX_PER_PAGE, RAW_DATA_PATH
+from nordjylland_news.utils import append_jsonl, html_to_text, init_jsonl, load_jsonl
 
 
 class SummaryDataSetBuilder:
