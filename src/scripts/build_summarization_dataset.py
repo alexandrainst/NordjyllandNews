@@ -1,4 +1,5 @@
 """Script that builds the summarisation dataset.
+
 Usage:
     >>> python src/scripts/build_summarization_dataset.py
 

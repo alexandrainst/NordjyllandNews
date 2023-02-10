@@ -52,9 +52,6 @@ class SummaryDataSetBuilder:
                 Total number of articless to get.
             sleep (int, optional):
                 Number of seconds to sleep between each page. Defaults to 30.
-
-        Returns:
-            None
         """
 
         # If total_articles already is reached, stop and return None
