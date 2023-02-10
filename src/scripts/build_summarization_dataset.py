@@ -7,6 +7,11 @@ Usage:
 
     As of 10 Feb 2023, there are a total of 80892 articles. To obtain a data set of all articles, run:
     >>> python src/scripts/build_summarization_dataset.py --total_articles 80892
+
+    The data set will be saved to the file RAW_DATA_PATH from src/nordjylland_news/constants.py.
+    If the file RAW_DATA_PATH does not exist, it will be created.
+    If it exists, the SummaryDataSetBuilder will continue from the latest unfinished page,
+    and the data set will be appended to the existing data set.
 """
 
 import argparse
