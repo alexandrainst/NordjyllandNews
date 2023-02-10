@@ -1,24 +1,33 @@
+"""Utility functions and classes to be used throughout the project."""
+
+from typing import List
+
 import jsonlines
 from bs4 import BeautifulSoup
 
 
-def init_jsonl(file_name: str):
-    """Initializes jsonl file
+def init_jsonl(file_name: str) -> None:
+    """Initializes jsonl file.
+
+    The function is used in the SummaryDataSetBuilder class to initialize
+    the data set file, if it does not already exist.
 
     Args:
         file_name (str):
-            File name to initialize
+            File name to initialize.
     """
     with open(file_name, "w") as _:
         pass
 
 
-def append_jsonl(data: list, file_name: str):
-    """Appends data to jsonl file
+def append_jsonl(data: list, file_name: str) -> None:
+    """Appends data to jsonl file.
 
     Args:
         data (list):
-            Data to append
+            Data to append.
+        file_name (str):
+            The name of the JSONL file where the data should be appended.
     """
 
     with jsonlines.open(file_name, mode="a") as writer:
@@ -26,16 +35,16 @@ def append_jsonl(data: list, file_name: str):
             writer.write(d)
 
 
-def load_jsonl(file_name: str):
-    """Loads jsonl file
+def load_jsonl(file_name: str) -> List[dict]:
+    """Loads jsonl file.
 
     Args:
         file_name (str):
-            File name to load
+            File name to load.
 
     Returns:
-        list:
-            Data from file
+        list of dict:
+            Data from file.
 
     """
     data_set = []
@@ -45,16 +54,16 @@ def load_jsonl(file_name: str):
     return data_set
 
 
-def html_to_text(html: str):
-    """Converts html to text
+def html_to_text(html: str) -> str:
+    """Converts html to text.
 
     Args:
         html (str):
-            Html to convert
+            Html to convert.
 
     Returns:
         str:
-            Text from html
+            Text from html.
     """
 
     soup = BeautifulSoup(html, "html.parser")
