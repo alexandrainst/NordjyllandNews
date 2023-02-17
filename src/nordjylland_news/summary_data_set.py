@@ -4,17 +4,14 @@ import os
 import time
 from typing import List, Set
 
-import requests
-
-from .constants import (
-    HEADERS,
-    MAX_PER_PAGE,
-    RAW_DATA_PATH,
-    SLEEP_5_SECONDS,
-    STATUS_CODE_OK,
-    TOO_MANY_REQUESTS,
+from .constants import MAX_PER_PAGE, RAW_DATA_PATH, SUMMARY_DATA_SET
+from .utils import (
+    append_jsonl,
+    get_page_with_articles_data,
+    html_to_text,
+    init_jsonl,
+    load_jsonl,
 )
-from .utils import append_jsonl, html_to_text, init_jsonl, load_jsonl
 
 
 class SummaryDataSetBuilder:
@@ -34,10 +31,10 @@ class SummaryDataSetBuilder:
             set:
                 Seen uuids.
         """
-        if not os.path.exists(RAW_DATA_PATH):
-            init_jsonl(RAW_DATA_PATH)
+        if not os.path.exists(RAW_DATA_PATH[SUMMARY_DATA_SET]):
+            init_jsonl(RAW_DATA_PATH[SUMMARY_DATA_SET])
 
-        articles = load_jsonl(RAW_DATA_PATH)
+        articles = load_jsonl(RAW_DATA_PATH[SUMMARY_DATA_SET])
         return set(article["uuid"] for article in articles)
 
     def build_data_set(self, total_articles: int, sleep: int = 30) -> None:
@@ -67,7 +64,7 @@ class SummaryDataSetBuilder:
         # Iterate over pages until total_articles is reached or until a page with no articles is visited.
         while True:
             new_articles = []
-            articles_data = self.get_page_with_articles_data(page=currrent_page)
+            articles_data = get_page_with_articles_data(page=currrent_page)
 
             # Check if there are no more articles to process.
             # If the `articles_data` list is empty, it means that the previous page was
@@ -101,48 +98,17 @@ class SummaryDataSetBuilder:
                             print(
                                 f"Total articless reached: {self.article_count}/{total_articles}"
                             )
-                            append_jsonl(new_articles, RAW_DATA_PATH)
+                            append_jsonl(new_articles, RAW_DATA_PATH[SUMMARY_DATA_SET])
                             return None
 
                 # Go to next page.
                 currrent_page += 1
 
             # Append new articles to data set.
-            append_jsonl(new_articles, RAW_DATA_PATH)
+            append_jsonl(new_articles, RAW_DATA_PATH[SUMMARY_DATA_SET])
 
             print(f"{self.article_count}/{total_articles}")
             time.sleep(sleep)
-
-    @staticmethod
-    def get_page_with_articles_data(page: int) -> List[dict]:
-        """
-        Args:
-            page (int):
-                Page number.
-
-        Returns:
-            list of dict:
-                List of articles data.
-        """
-
-        url = f"https://public.nord.bazo.dk/v1/articles?page[number]={page}&page[size]={MAX_PER_PAGE}"
-        while True:
-            try:
-                response = requests.get(url, headers=HEADERS)
-                if response.status_code == TOO_MANY_REQUESTS:
-                    time.sleep(SLEEP_5_SECONDS)
-                elif response.status_code != STATUS_CODE_OK:
-                    raise Exception(
-                        f"Request failed for url: {url} with status code: {response.status_code}"
-                    )
-                else:
-                    data = response.json()
-                    break
-            except requests.RequestException:
-                print("Request failed for url: ", url)
-
-        articles_data = data["data"]
-        return articles_data
 
     @staticmethod
     def get_uuid(article: dict) -> str:
