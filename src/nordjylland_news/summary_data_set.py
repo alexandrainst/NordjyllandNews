@@ -1,5 +1,6 @@
 """Class that builds and contains the summarisation dataset."""
 
+import logging
 import os
 import time
 from typing import List, Set
@@ -12,6 +13,8 @@ from .utils import (
     init_jsonl,
     load_jsonl,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class SummaryDataSetBuilder:
@@ -53,7 +56,7 @@ class SummaryDataSetBuilder:
 
         # If total_articles already is reached, stop and return None
         if self.article_count >= total_articles:
-            print(
+            logger.info(
                 f"Total articless already reached: {self.article_count}/{total_articles}"
             )
             return None
@@ -70,8 +73,8 @@ class SummaryDataSetBuilder:
             # If the `articles_data` list is empty, it means that the previous page was
             # the last page containing articles. In this case, stop processing and return None.
             if not articles_data:
-                print(f"{self.article_count}/{total_articles}")
-                print("No more articles")
+                logger.info(f"{self.article_count}/{total_articles}")
+                logger.info("No more articles")
                 return None
             else:
                 # Iterate over articles on current page
@@ -95,7 +98,7 @@ class SummaryDataSetBuilder:
                         # Check if total_articles is reached.
                         # If so, stop processing, append new articles to data set and return None.
                         if self.article_count >= total_articles:
-                            print(
+                            logger.info(
                                 f"Total articless reached: {self.article_count}/{total_articles}"
                             )
                             append_jsonl(new_articles, RAW_DATA_PATH[SUMMARY_DATA_SET])
@@ -107,7 +110,7 @@ class SummaryDataSetBuilder:
             # Append new articles to data set.
             append_jsonl(new_articles, RAW_DATA_PATH[SUMMARY_DATA_SET])
 
-            print(f"{self.article_count}/{total_articles}")
+            logger.info(f"Articles processed: {self.article_count}/{total_articles}")
             time.sleep(sleep)
 
     @staticmethod

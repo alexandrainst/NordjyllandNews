@@ -1,5 +1,6 @@
 """Utility functions and classes to be used throughout the project."""
 
+import logging
 import time
 from typing import List
 
@@ -17,6 +18,8 @@ from .constants import (
     STATUS_CODE_OK,
     TOO_MANY_REQUESTS,
 )
+
+logger = logging.getLogger(__name__)
 
 
 def init_jsonl(file_name: str) -> None:
@@ -112,7 +115,7 @@ def send_request(url) -> dict:
                 data = response.json()
                 break
         except requests.RequestException:
-            print("Request failed for url: ", url)
+            logger.info(f"Request failed for url: {url}")
     return data
 
 

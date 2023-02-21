@@ -1,5 +1,6 @@
 """Class that builds the image caption dataset."""
 
+import logging
 import os
 import time
 from typing import Dict, List
@@ -17,6 +18,8 @@ from .utils import (
     init_jsonl,
     load_jsonl,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class ImageCaptionDataSetBuilder:
@@ -60,8 +63,8 @@ class ImageCaptionDataSetBuilder:
             # If the `articles_data` list is empty, it means that the previous page was
             # the last page containing articles. In this case, stop processing and return None.
             if not articles_data:
-                print("No more articles")
-                print("Page: ", self.current_page)
+                logger.info("No more articles.")
+                logger.info(f"Page: {self.current_page}")
                 return None
             else:
                 # Iterate over articles on current page
@@ -74,10 +77,10 @@ class ImageCaptionDataSetBuilder:
                 self.new_image_meta_data, RAW_DATA_PATH[IMAGE_CAPTION_DATA_SET]
             )
 
-            # Print number of articles processed.
+            # Log number of articles processed.
             # Most pages will contain 100 articles, but there are some exceptions.
-            # The print might therefore not be exactly correct, but should give a good indication of progress.
-            print(
+            # The log might therefore not be exactly correct, but should give a good indication of progress.
+            logger.info(
                 f"Articles processed: {self.current_page * MAX_PER_PAGE}/{self.total_articles}"
             )
 

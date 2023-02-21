@@ -16,8 +16,11 @@ Usage:
 """
 
 import argparse
+import logging
 
 from nordjylland_news.summary_data_set import SummaryDataSetBuilder
+
+logger = logging.getLogger(__name__)
 
 
 def main() -> None:
@@ -27,7 +30,7 @@ def main() -> None:
 
     total_articles = args.total_articles
 
-    print("...Building data set with total samples:", total_articles)
+    logger.info("Building summarisation data set")
 
     builder = SummaryDataSetBuilder()
     builder.build_data_set(total_articles=total_articles)
