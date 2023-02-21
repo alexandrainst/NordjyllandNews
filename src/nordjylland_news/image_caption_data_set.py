@@ -95,7 +95,6 @@ class ImageCaptionDataSetBuilder:
                 Article data.
         """
         for content in article_data["content"]:
-
             # Check if content is an image with a caption.
             if (
                 content["type"] == "Image"
