@@ -84,7 +84,7 @@ def html_to_text(html: str) -> str:
     return text
 
 
-def send_request(url):
+def send_request(url) -> dict:
     """Sends request.
 
     Args:
@@ -129,7 +129,8 @@ def get_total_articles() -> int:
 
 
 def get_page_with_articles_data(page: int) -> List[dict]:
-    """
+    """Gets page with articles data from the API.
+
     Args:
         page (int):
             Page number.
