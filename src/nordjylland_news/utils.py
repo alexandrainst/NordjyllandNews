@@ -9,12 +9,10 @@ import requests
 from bs4 import BeautifulSoup
 
 from .constants import (
-    ARTICLES_API_URL,
     ERROR_500,
     HEADERS,
-    MAX_PER_PAGE,
-    SLEEP_5_SECONDS,
-    SLEEP_15_MINUTES,
+    SLEEP_LONG,
+    SLEEP_SHORT,
     STATUS_CODE_OK,
     TOO_MANY_REQUESTS,
 )
@@ -25,8 +23,8 @@ logger = logging.getLogger(__name__)
 def init_jsonl(file_name: str) -> None:
     """Initializes jsonl file.
 
-    The function is used in the SummaryDataSetBuilder class to initialize
-    the data set file, if it does not already exist.
+    The function is used in the DataSetBuilder class to initialize
+    the dataset file, if it does not already exist.
 
     Args:
         file_name (str):
@@ -63,11 +61,11 @@ def load_jsonl(file_name: str) -> List[dict]:
             Data from file.
 
     """
-    data_set = []
+    dataset = []
     with jsonlines.open(file_name, mode="r") as reader:
         for obj in reader:
-            data_set.append(obj)
-    return data_set
+            dataset.append(obj)
+    return dataset
 
 
 def html_to_text(html: str) -> str:
@@ -87,7 +85,7 @@ def html_to_text(html: str) -> str:
     return text
 
 
-def send_request(url) -> dict:
+def send_request(url: str) -> dict:
     """Sends request.
 
     Args:
@@ -104,9 +102,9 @@ def send_request(url) -> dict:
         try:
             response = requests.get(url, headers=HEADERS)
             if response.status_code == TOO_MANY_REQUESTS:
-                time.sleep(SLEEP_5_SECONDS)
+                time.sleep(SLEEP_SHORT)
             elif response.status_code == ERROR_500:
-                time.sleep(SLEEP_15_MINUTES)
+                time.sleep(SLEEP_LONG)
             elif response.status_code != STATUS_CODE_OK:
                 raise Exception(
                     f"Request failed for url: {url} with status code: {response.status_code}"
@@ -117,33 +115,3 @@ def send_request(url) -> dict:
         except requests.RequestException:
             logger.info(f"Request failed for url: {url}")
     return data
-
-
-def get_total_articles() -> int:
-    """Gets total number of articles.
-
-    Returns:
-        int:
-            Total number of articles.
-    """
-    data = send_request(ARTICLES_API_URL)
-    total_articles = data["meta"]["total"]
-    return total_articles
-
-
-def get_page_with_articles_data(page: int) -> List[dict]:
-    """Gets page with articles data from the API.
-
-    Args:
-        page (int):
-            Page number.
-
-    Returns:
-        list of dict:
-            List of articles data.
-    """
-
-    url = f"{ARTICLES_API_URL}?page[number]={page}&page[size]={MAX_PER_PAGE}"
-    data = send_request(url)
-    articles_data = data["data"]
-    return articles_data

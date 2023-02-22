@@ -4,18 +4,17 @@ Usage:
     >>> python src/scripts/build_image_caption_dataset.py
 """
 
-import logging
+import hydra
+from omegaconf import DictConfig
 
-from nordjylland_news.image_caption_data_set import ImageCaptionDataSetBuilder
-
-logger = logging.getLogger(__name__)
+from nordjylland_news.image_caption_dataset import ImageCaptionDataSetBuilder
 
 
-def main():
-    logger.info("Building image caption data set")
-
-    builder = ImageCaptionDataSetBuilder()
-    builder.build_data_set()
+@hydra.main(config_path="../../config", config_name="config.yaml")
+def main(cfg: DictConfig):
+    dataset_name = cfg["data-set-names"]["image_caption"]
+    builder = ImageCaptionDataSetBuilder(dataset_name=dataset_name, cfg=cfg)
+    builder.build_dataset()
 
 
 if __name__ == "__main__":
