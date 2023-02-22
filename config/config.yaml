@@ -6,3 +6,11 @@ dirs:
   raw: raw
   processed: processed
   final: final
+
+api-info:
+  url: https://public.nord.bazo.dk/v1/articles
+  max_per_page: 100
+
+data-set-names:
+  summary_dataset: summary
+  image_caption: image_caption
