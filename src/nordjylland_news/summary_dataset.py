@@ -13,13 +13,35 @@ class SummaryDataSetBuilder(DataSetBuilder):
     """Builds dataset with article text content and article summary."""
 
     def __init__(self, dataset_name: str, cfg: DictConfig) -> None:
-        """Initialize class with dataset name and config.
+        """Initialize SummaryDataSetBuilder.
 
         Args:
             dataset_name (str):
                 Name of dataset.
             cfg (DictConfig):
                 Hydra config.
+
+        Attributes:
+            dataset_name (str):
+                Name of dataset.
+            cfg (DictConfig):
+                Hydra config.
+            logger (logging.Logger):
+                Logger.
+            data_path (str):
+                Path to dataset.
+            max_per_page (int):
+                Maximum number of articles per page.
+            articles_api_url (str):
+                URL to articles API.
+            dataset (list of dict):
+                Dataset.
+            seen_uuids (set of str):
+                Set of seen uuids.
+            current_page (int):
+                Current page to scrape.
+            dataset_length (int):
+                Number of articles in dataset.
         """
         # Initialize base class
         super().__init__(dataset_name=dataset_name, cfg=cfg)
