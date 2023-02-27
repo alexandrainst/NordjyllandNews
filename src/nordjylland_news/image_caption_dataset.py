@@ -39,6 +39,8 @@ class ImageCaptionDataSetBuilder(DataSetBuilder):
                 Set of seen uuids.
             current_page (int):
                 Current page to scrape.
+            sleep_length (dict of int):
+                Length of sleep in seconds.
             new_data (list of dict):
                 New data to append to dataset.
         """

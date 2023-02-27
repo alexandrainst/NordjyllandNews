@@ -3,15 +3,17 @@
 import logging
 import os
 import time
+from abc import ABC, abstractmethod
 from typing import List
 
+import requests
 from omegaconf import DictConfig
 
-from .constants import SLEEP_MEDIUM
-from .utils import init_jsonl, load_jsonl, send_request
+from .constants import ERROR_500, HEADERS, STATUS_CODE_OK, TOO_MANY_REQUESTS
+from .utils import init_jsonl, load_jsonl
 
 
-class DataSetBuilder:
+class DataSetBuilder(ABC):
     """Base class for building datasets with the TV2 Nord API"""
 
     def __init__(self, dataset_name: str, cfg: DictConfig) -> None:
@@ -42,12 +44,14 @@ class DataSetBuilder:
                 Set of seen uuids.
             current_page (int):
                 Current page to scrape.
+            sleep_length (dict of int):
+                Length of sleep in seconds.
         """
         self.dataset_name = dataset_name
         self.cfg = cfg
         self.read_cfg()
 
-        self.logger = logging.getLogger(__name__)
+        self.logger = logging.getLogger(self.dataset_name)
 
         # Load dataset currently stored on disk, and use it to set current_page.
         self.dataset = self.load_dataset()
@@ -87,13 +91,14 @@ class DataSetBuilder:
             int:
                 Total number of articles.
         """
-        data = send_request(self.articles_api_url)
+        data = self.send_request(self.articles_api_url)
         total_articles = data["meta"]["total"]
         return total_articles
 
+    @abstractmethod
     def build_dataset(self) -> None:
         """Builds dataset."""
-        raise NotImplementedError
+        pass
 
     def read_cfg(self) -> None:
         """Reads config.
@@ -102,8 +107,13 @@ class DataSetBuilder:
             cfg (DictConfig):
                 Hydra config.
         """
-        self.max_per_page = self.cfg["api-info"]["max_per_page"]
-        self.articles_api_url = self.cfg["api-info"]["url"]
+        self.max_per_page = self.cfg["api_info"]["max_per_page"]
+        self.articles_api_url = self.cfg["api_info"]["url"]
+        self.sleep_length = {
+            "short": self.cfg["sleeps"]["short"],
+            "medium": self.cfg["sleeps"]["medium"],
+            "long": self.cfg["sleeps"]["long"],
+        }
 
     def get_page_with_articles(self, page: int) -> List[dict]:
         """Gets page with articles data from the API.
@@ -118,7 +128,7 @@ class DataSetBuilder:
         """
 
         url = f"{self.articles_api_url}?page[number]={page}&page[size]={self.max_per_page}"
-        data = send_request(url)
+        data = self.send_request(url)
         articles = data["data"]
         return articles
 
@@ -155,8 +165,39 @@ class DataSetBuilder:
 
     def sleep(self) -> None:
         """Sleep to avoid getting blocked by the API."""
-        time.sleep(SLEEP_MEDIUM)
+        time.sleep(self.sleep_length["medium"])
 
     def page_increment(self) -> None:
         """Increments current page."""
         self.current_page += 1
+
+    def send_request(self, url: str) -> dict:
+        """Sends request.
+
+        Args:
+            url (str):
+                Url to send request to.
+            headers (dict):
+                Headers to send with request.
+
+        Returns:
+            dict:
+                Response data.
+        """
+        while True:
+            try:
+                response = requests.get(url, headers=HEADERS)
+                if response.status_code == TOO_MANY_REQUESTS:
+                    time.sleep(self.sleep_length["short"])
+                elif response.status_code == ERROR_500:
+                    time.sleep(self.sleep_length["long"])
+                elif response.status_code != STATUS_CODE_OK:
+                    raise Exception(
+                        f"Request failed for url: {url} with status code: {response.status_code}"
+                    )
+                else:
+                    data = response.json()
+                    break
+            except requests.RequestException:
+                self.logger.info(f"Request failed for url: {url}")
+        return data

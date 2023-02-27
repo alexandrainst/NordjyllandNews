@@ -40,6 +40,8 @@ class SummaryDataSetBuilder(DataSetBuilder):
                 Set of seen uuids.
             current_page (int):
                 Current page to scrape.
+            sleep_length (dict of int):
+                Length of sleep in seconds.
             dataset_length (int):
                 Number of articles in dataset.
         """
