@@ -10,42 +10,41 @@ from .utils import append_jsonl, html_to_text
 
 
 class SummaryDataSetBuilder(DataSetBuilder):
-    """Builds dataset with article text content and article summary."""
+    """Builds dataset with article text content and article summary.
+
+    Args:
+        dataset_name (str):
+            Name of dataset.
+        cfg (DictConfig):
+            Hydra config.
+
+    Attributes:
+        dataset_name (str):
+            Name of dataset.
+        cfg (DictConfig):
+            Hydra config.
+        logger (logging.Logger):
+            Logger.
+        data_path (str):
+            Path to dataset.
+        max_per_page (int):
+            Maximum number of articles per page.
+        articles_api_url (str):
+            URL to articles API.
+        dataset (list of dict):
+            Dataset.
+        seen_uuids (set of str):
+            Set of seen uuids.
+        current_page (int):
+            Current page to scrape.
+        sleep_length (dict of int):
+            Length of sleep in seconds.
+        dataset_length (int):
+            Number of articles in dataset.
+
+    """
 
     def __init__(self, dataset_name: str, cfg: DictConfig) -> None:
-        """Initialize SummaryDataSetBuilder.
-
-        Args:
-            dataset_name (str):
-                Name of dataset.
-            cfg (DictConfig):
-                Hydra config.
-
-        Attributes:
-            dataset_name (str):
-                Name of dataset.
-            cfg (DictConfig):
-                Hydra config.
-            logger (logging.Logger):
-                Logger.
-            data_path (str):
-                Path to dataset.
-            max_per_page (int):
-                Maximum number of articles per page.
-            articles_api_url (str):
-                URL to articles API.
-            dataset (list of dict):
-                Dataset.
-            seen_uuids (set of str):
-                Set of seen uuids.
-            current_page (int):
-                Current page to scrape.
-            sleep_length (dict of int):
-                Length of sleep in seconds.
-            dataset_length (int):
-                Number of articles in dataset.
-        """
-        # Initialize base class
         super().__init__(dataset_name=dataset_name, cfg=cfg)
 
         # Number of articles in dataset
@@ -53,9 +52,9 @@ class SummaryDataSetBuilder(DataSetBuilder):
 
     def build_dataset(self) -> None:
         """Builds article text content to article summary dataset.
+
         Starts from page self.current_page. When a page is reached that has no articles,
         the method stops and returns None.
-
         """
         self.logger.info("Building summarisation dataset")
 

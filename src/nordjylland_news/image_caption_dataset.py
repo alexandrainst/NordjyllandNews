@@ -9,43 +9,38 @@ from .utils import append_jsonl
 
 
 class ImageCaptionDataSetBuilder(DataSetBuilder):
-    """Builds dataset with images and captions."""
+    """Builds dataset with images and captions.
 
-    def __init__(self, dataset_name: str, cfg: DictConfig) -> None:
-        """Initialize ImageCaptionDataSetBuilder.
+    Args:
+        dataset_name (str):
+            Name of dataset.
+        cfg (DictConfig):
+            Hydra config.
 
-        Args:
-            dataset_name (str):
-                Name of dataset.
-            cfg (DictConfig):
-                Hydra config.
-
-        Attributes:
-            dataset_name (str):
-                Name of dataset.
-            cfg (DictConfig):
-                Hydra config.
-            logger (logging.Logger):
-                Logger.
-            data_path (str):
-                Path to dataset.
-            max_per_page (int):
-                Maximum number of articles per page.
-            articles_api_url (str):
-                URL to articles API.
-            dataset (list of dict):
-                Dataset.
-            seen_uuids (set of str):
-                Set of seen uuids.
-            current_page (int):
-                Current page to scrape.
-            sleep_length (dict of int):
-                Length of sleep in seconds.
-            new_data (list of dict):
-                New data to append to dataset.
-        """
-        # Initialize base class
-        super().__init__(dataset_name=dataset_name, cfg=cfg)
+    Attributes:
+        dataset_name (str):
+            Name of dataset.
+        cfg (DictConfig):
+            Hydra config.
+        logger (logging.Logger):
+            Logger.
+        data_path (str):
+            Path to dataset.
+        max_per_page (int):
+            Maximum number of articles per page.
+        articles_api_url (str):
+            URL to articles API.
+        dataset (list of dict):
+            Dataset.
+        seen_uuids (set of str):
+            Set of seen uuids.
+        current_page (int):
+            Current page to scrape.
+        sleep_length (dict of int):
+            Length of sleep in seconds.
+        new_data (list of dict):
+            New data to append to dataset.
+    """
 
     def build_dataset(self) -> None:
         """Builds image caption dataset.
