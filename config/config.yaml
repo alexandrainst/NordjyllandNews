@@ -7,10 +7,15 @@ dirs:
   processed: processed
   final: final
 
-api-info:
+api_info:
   url: https://public.nord.bazo.dk/v1/articles
   max_per_page: 100
 
-data-set-names:
+data_set_names:
   summary_dataset: summary
   image_caption: image_caption
+
+sleeps:
+  short: 5
+  medium: 60
+  long: 900
