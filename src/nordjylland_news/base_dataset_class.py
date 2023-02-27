@@ -15,6 +15,14 @@ class DataSetBuilder:
     """Base class for building datasets with the TV2 Nord API"""
 
     def __init__(self, dataset_name: str, cfg: DictConfig) -> None:
+        """Initialize class with dataset name and config.
+
+        Args:
+            dataset_name (str):
+                Name of dataset.
+            cfg (DictConfig):
+                Hydra config.
+        """
         self.dataset_name = dataset_name
         self.cfg = cfg
         self.read_cfg()

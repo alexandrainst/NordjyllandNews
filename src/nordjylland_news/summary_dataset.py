@@ -13,6 +13,15 @@ class SummaryDataSetBuilder(DataSetBuilder):
     """Builds dataset with article text content and article summary."""
 
     def __init__(self, dataset_name: str, cfg: DictConfig) -> None:
+        """Initialize class with dataset name and config.
+
+        Args:
+            dataset_name (str):
+                Name of dataset.
+            cfg (DictConfig):
+                Hydra config.
+        """
+        # Initialize base class
         super().__init__(dataset_name=dataset_name, cfg=cfg)
 
         # Number of articles in dataset

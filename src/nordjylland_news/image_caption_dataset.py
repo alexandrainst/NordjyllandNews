@@ -2,6 +2,8 @@
 
 from typing import Dict, List
 
+from omegaconf import DictConfig
+
 from .base_dataset_class import DataSetBuilder
 from .utils import append_jsonl
 
@@ -9,7 +11,16 @@ from .utils import append_jsonl
 class ImageCaptionDataSetBuilder(DataSetBuilder):
     """Builds dataset with images and captions."""
 
-    def __init__(self, dataset_name, cfg) -> None:
+    def __init__(self, dataset_name: str, cfg: DictConfig) -> None:
+        """Initialize class with dataset name and config.
+
+        Args:
+            dataset_name (str):
+                Name of dataset.
+            cfg (DictConfig):
+                Hydra config.
+        """
+        # Initialize base class
         super().__init__(dataset_name=dataset_name, cfg=cfg)
 
     def build_dataset(self) -> None:
