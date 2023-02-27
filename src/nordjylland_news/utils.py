@@ -1,16 +1,19 @@
 """Utility functions and classes to be used throughout the project."""
 
+import logging
 from typing import List
 
 import jsonlines
 from bs4 import BeautifulSoup
 
+logger = logging.getLogger(__name__)
+
 
 def init_jsonl(file_name: str) -> None:
     """Initializes jsonl file.
 
-    The function is used in the SummaryDataSetBuilder class to initialize
-    the data set file, if it does not already exist.
+    The function is used in the DataSetBuilder class to initialize
+    the dataset file, if it does not already exist.
 
     Args:
         file_name (str):
@@ -47,11 +50,11 @@ def load_jsonl(file_name: str) -> List[dict]:
             Data from file.
 
     """
-    data_set = []
+    dataset = []
     with jsonlines.open(file_name, mode="r") as reader:
         for obj in reader:
-            data_set.append(obj)
-    return data_set
+            dataset.append(obj)
+    return dataset
 
 
 def html_to_text(html: str) -> str:
