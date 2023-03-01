@@ -2,8 +2,6 @@
 
 from typing import Dict, List
 
-from omegaconf import DictConfig
-
 from .base_dataset_class import DataSetBuilder
 from .utils import append_jsonl
 
@@ -76,6 +74,11 @@ class ImageCaptionDataSetBuilder(DataSetBuilder):
             )
 
             self.page_increment()
+
+            # If dataset is test dataset, stop after first page.
+            if self.dataset_name == "test":
+                return
+
             self.sleep()
 
     def get_image_data(self, article: dict) -> None:

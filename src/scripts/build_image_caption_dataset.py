@@ -12,7 +12,7 @@ from nordjylland_news.image_caption_dataset import ImageCaptionDataSetBuilder
 
 @hydra.main(config_path="../../config", config_name="config.yaml")
 def main(cfg: DictConfig):
-    dataset_name = cfg["data_set_names"]["image_caption"]
+    dataset_name = cfg["dataset_names"]["image_caption"]
     builder = ImageCaptionDataSetBuilder(dataset_name=dataset_name, cfg=cfg)
     builder.build_dataset()
 

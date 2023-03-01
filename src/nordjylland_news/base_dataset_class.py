@@ -77,11 +77,14 @@ class DataSetBuilder(ABC):
             str:
                 Data path.
         """
-        dirs = self.cfg["dirs"]
-        data = dirs["data"]
-        raw = dirs["raw"]
-        to_root = "../" * 3  # Just Hydra things
-        data_path = f"{to_root}{data}/{raw}/{self.dataset_name}.jsonl"
+        if self.dataset_name == "test":
+            data_path = f"{self.dataset_name}.jsonl"
+        else:
+            dirs = self.cfg["dirs"]
+            data = dirs["data"]
+            raw = dirs["raw"]
+            to_root = "../" * 3  # Just Hydra things
+            data_path = f"{to_root}{data}/{raw}/{self.dataset_name}.jsonl"
         return data_path
 
     def get_total_articles(self) -> int:
@@ -160,7 +163,6 @@ class DataSetBuilder(ABC):
             bool:
                 True if dataset is done, False otherwise.
         """
-
         return not bool(articles)
 
     def sleep(self) -> None:
