@@ -1,3 +1,5 @@
+"""Unit tests for the `summary_dataset` module."""
+
 import os
 
 import pytest

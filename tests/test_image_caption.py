@@ -1,3 +1,5 @@
+"""Unit tests for the `image_caption_dataset` module."""
+
 import os
 from typing import Any, Dict
 
