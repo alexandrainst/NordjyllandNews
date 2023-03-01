@@ -16,12 +16,12 @@ def builder():
 
 class TestAPIArticleData:
     def test_get_total_articles(self, builder: SummaryDataSetBuilder):
-        """Test the get_total_articles() method."""
+        """Test the get_total_articles() method for the SummaryDataSetBuilder class."""
         total_articles = builder.get_total_articles()
         assert total_articles > 0
 
     def test_get_page_with_articles(self, builder: SummaryDataSetBuilder):
-        """Test the get_page_with_articles() method, and that an article has the expected keys."""
+        """Test the get_page_with_articles() method for the SummaryDataSetBuilder class, and test that an article has the expected keys."""
         page = 1
         articles = builder.get_page_with_articles(page)
         assert articles

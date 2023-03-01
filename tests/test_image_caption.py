@@ -76,7 +76,7 @@ class TestAPIArticleData:
 
 class TestImageMetaDataExtraction:
     def test_get_image_meta_data(self, builder: ImageCaptionDataSetBuilder):
-        """Test the _get_image_meta_data() method."""
+        """Test the _get_image_meta_data() method for the ImageCaptionDataSetBuilder class."""
         article: Dict[Any, Any] = {
             "uuid": "123",
             "canonical": "https://example.com/article",
@@ -107,7 +107,7 @@ class TestImageMetaDataExtraction:
         assert data == expected_data
 
     def test_get_image_data(self, builder: ImageCaptionDataSetBuilder):
-        """Test the get_image_data() method."""
+        """Test the get_image_data() method for the ImageCaptionDataSetBuilder class."""
         article = {
             "uuid": "123",
             "canonical": "https://example.com/article",
