@@ -44,7 +44,7 @@ class SummaryDataSetBuilder(DataSetBuilder):
     """
 
     def __init__(self, cfg: DictConfig) -> None:
-        dataset_name = cfg["dataset_names"]["summary_dataset"]
+        dataset_name = cfg["dataset_names"]["summary"]
         super().__init__(dataset_name=dataset_name, cfg=cfg)
 
         # Number of articles in dataset
