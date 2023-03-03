@@ -2,6 +2,8 @@
 
 from typing import Dict, List
 
+from omegaconf import DictConfig
+
 from .base_dataset_class import DataSetBuilder
 from .utils import append_jsonl
 
@@ -39,6 +41,10 @@ class ImageCaptionDataSetBuilder(DataSetBuilder):
         new_data (list of dict):
             New data to append to dataset.
     """
+
+    def __init__(self, cfg: DictConfig) -> None:
+        dataset_name = cfg["dataset_names"]["image_caption"]
+        super().__init__(dataset_name=dataset_name, cfg=cfg)
 
     def build_dataset(self) -> None:
         """Builds image caption dataset.

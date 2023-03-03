@@ -12,7 +12,7 @@ api_info:
   max_per_page: 100
 
 dataset_names:
-  summary_dataset: summary
+  summary: summary
   image_caption: image_caption
   test: test
 

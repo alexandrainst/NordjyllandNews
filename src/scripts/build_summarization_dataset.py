@@ -12,8 +12,7 @@ from nordjylland_news.summary_dataset import SummaryDataSetBuilder
 
 @hydra.main(config_path="../../config", config_name="config.yaml")
 def main(cfg: DictConfig) -> None:
-    dataset_name = cfg["dataset_names"]["summary_dataset"]
-    builder = SummaryDataSetBuilder(dataset_name=dataset_name, cfg=cfg)
+    builder = SummaryDataSetBuilder(cfg=cfg)
     builder.build_dataset()
 
 
