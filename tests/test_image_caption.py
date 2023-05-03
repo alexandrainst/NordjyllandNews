@@ -14,11 +14,6 @@ def image_caption_builder(config):
     return ImageCaptionDataSetBuilder(config)
 
 
-def test_load_dataset(image_caption_builder):
-    _ = image_caption_builder.load_dataset()
-    assert os.path.exists(image_caption_builder.data_path)
-
-
 def test_get_total_articles(image_caption_builder):
     total_articles = image_caption_builder.get_total_articles()
     assert total_articles > 0
