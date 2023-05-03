@@ -87,10 +87,6 @@ class SummaryDataSetBuilder(DataSetBuilder):
 
             self.page_increment()
 
-            # If dataset is test dataset, stop after first page.
-            if self.dataset_name == "test":
-                return
-
             self.sleep()
 
     def get_article_data(self, article: dict) -> Dict:
