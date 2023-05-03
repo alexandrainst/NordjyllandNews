@@ -1,5 +1,7 @@
 """Unit tests for the `summary_dataset` module."""
 
+import os
+
 import pytest
 
 from nordjylland_news.summary_dataset import SummaryDataSetBuilder
@@ -10,6 +12,11 @@ PAGE = 1
 @pytest.fixture(scope="module")
 def summary_builder(config):
     return SummaryDataSetBuilder(config)
+
+
+def test_load_dataset(summary_builder):
+    _ = summary_builder.load_dataset()
+    assert os.path.exists(summary_builder.data_path)
 
 
 def test_get_total_articles(summary_builder):
