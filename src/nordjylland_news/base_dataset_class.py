@@ -83,15 +83,14 @@ class DataSetBuilder(ABC):
             dirs = self.cfg["dirs"]
             data = dirs["data"]
             raw = dirs["raw"]
-            to_root = "../" * 3  # Just Hydra things
-            data_path = Path(to_root) / data / raw / f"{self.dataset_name}.jsonl"
+            data_path = Path(data) / raw / f"{self.dataset_name}.jsonl"
         return data_path
 
     def get_total_articles(self) -> int:
         """Gets total number of articles in the API.
 
         Returns:
-            int:
+            total_articles (int):
                 Total number of articles.
         """
         data = self.send_request(self.articles_api_url)
