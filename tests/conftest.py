@@ -11,5 +11,5 @@ initialize(config_path="../config", version_base=None)
 def config():
     return compose(
         config_name="config",
-        # overrides=[],
+        overrides=["testing=True"],
     )

@@ -23,3 +23,5 @@ sleeps:
   short: 5
   medium: 60
   long: 900
+
+testing: False

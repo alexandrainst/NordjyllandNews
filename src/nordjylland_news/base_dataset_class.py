@@ -54,7 +54,7 @@ class DataSetBuilder(ABC):
         self.read_cfg(cfg)
 
         # Load dataset currently stored on disk, and use it to set current_page.
-        self.dataset = self.load_dataset()
+        self.dataset = self.load_dataset() if not self.testing else []
 
         # Get all uuids in dataset
         self.seen_uuids = set(data["uuid"] for data in self.dataset)
@@ -116,6 +116,7 @@ class DataSetBuilder(ABC):
             "medium": cfg["sleeps"]["medium"],
             "long": cfg["sleeps"]["long"],
         }
+        self.testing = cfg["testing"]
         self.cfg = cfg
 
     def get_page_with_articles(self, page: int) -> List[dict]:
