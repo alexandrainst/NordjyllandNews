@@ -1,12 +1,9 @@
 """Utility functions and classes to be used throughout the project."""
 
-import logging
 from typing import List
 
 import jsonlines
 from bs4 import BeautifulSoup
-
-logger = logging.getLogger(__name__)
 
 
 def init_jsonl(file_name: str) -> None:
