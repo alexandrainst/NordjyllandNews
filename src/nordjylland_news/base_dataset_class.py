@@ -102,7 +102,7 @@ class DataSetBuilder(ABC):
         """Builds dataset."""
         pass
 
-    def read_cfg(self, cfg) -> None:
+    def read_cfg(self, cfg: DictConfig) -> None:
         """Reads config.
 
         Args:
