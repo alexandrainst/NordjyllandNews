@@ -1,15 +1,11 @@
 """Unit tests for the `image_caption_dataset` module."""
 
-import os
-
 import pytest
 
 from nordjylland_news.image_caption_dataset import ImageCaptionDataSetBuilder
 
-PAGE = 1
 
-
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="module")
 def image_caption_builder(config):
     return ImageCaptionDataSetBuilder(config)
 
@@ -20,8 +16,8 @@ def test_get_total_articles(image_caption_builder):
 
 
 @pytest.fixture(scope="module")
-def articles(image_caption_builder):
-    return image_caption_builder.get_page_with_articles(PAGE)
+def articles(image_caption_builder, page):
+    return image_caption_builder.get_page_with_articles(page)
 
 
 @pytest.fixture(scope="module")

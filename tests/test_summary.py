@@ -1,12 +1,8 @@
 """Unit tests for the `summary_dataset` module."""
 
-import os
-
 import pytest
 
 from nordjylland_news.summary_dataset import SummaryDataSetBuilder
-
-PAGE = 1
 
 
 @pytest.fixture(scope="module")
@@ -20,8 +16,8 @@ def test_get_total_articles(summary_builder):
 
 
 @pytest.fixture(scope="module")
-def articles(summary_builder):
-    return summary_builder.get_page_with_articles(PAGE)
+def articles(summary_builder, page):
+    return summary_builder.get_page_with_articles(page)
 
 
 @pytest.fixture(scope="module")

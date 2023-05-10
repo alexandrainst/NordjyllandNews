@@ -1,5 +1,7 @@
 """Session-wide fixtures for tests."""
 
+from typing import Generator
+
 import pytest
 from hydra import compose, initialize
 
@@ -13,3 +15,8 @@ def config():
         config_name="config",
         overrides=["testing=True"],
     )
+
+
+@pytest.fixture(scope="session")
+def page() -> Generator[int, None, None]:
+    yield 1
