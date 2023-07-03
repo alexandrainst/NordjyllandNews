@@ -20,7 +20,7 @@ def init_jsonl(file_name: str) -> None:
         pass
 
 
-def append_jsonl(data: list, file_name: str) -> None:
+def append_jsonl(data: list, file_name: str, keys_to_str: list = []) -> None:
     """Appends data to jsonl file.
 
     Args:
@@ -28,10 +28,14 @@ def append_jsonl(data: list, file_name: str) -> None:
             Data to append.
         file_name (str):
             The name of the JSONL file where the data should be appended.
+        keys_to_str (list):
+            List of keys to convert to string (for example PosixPath objects)
     """
 
     with jsonlines.open(file_name, mode="a") as writer:
         for d in data:
+            for key in keys_to_str:
+                d[key] = str(d[key])
             writer.write(d)
 
 

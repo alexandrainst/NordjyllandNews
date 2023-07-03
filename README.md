@@ -6,7 +6,7 @@ ______________________________________________________________________
 [![Documentation](https://img.shields.io/badge/docs-passing-green)](https://alexandrainst.github.io/NordjyllandNews/nordjylland_news.html)
 [![License](https://img.shields.io/github/license/alexandrainst/NordjyllandNews)](https://github.com/alexandrainst/NordjyllandNews/blob/main/LICENSE)
 [![LastCommit](https://img.shields.io/github/last-commit/alexandrainst/NordjyllandNews)](https://github.com/alexandrainst/NordjyllandNews/commits/main)
-[![Code Coverage](https://img.shields.io/badge/Coverage-62%25-yellow.svg)](https://github.com/alexandrainst/NordjyllandNews/tree/main/tests)
+[![Code Coverage](https://img.shields.io/badge/Coverage-66%25-yellow.svg)](https://github.com/alexandrainst/NordjyllandNews/tree/main/tests)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg)](https://github.com/alexandrainst/NordjyllandNews/blob/main/CODE_OF_CONDUCT.md)
 
 

@@ -74,7 +74,7 @@ class ImageCaptionDataSetBuilder(DataSetBuilder):
                     self.get_image_data(article)
 
             # Append new data to dataset.
-            append_jsonl(self.new_data, self.data_path)
+            append_jsonl(self.new_data, self.data_path, keys_to_str=["file_name"])
 
             # Log progess
             # Most pages will contain 100 articles, but there are some exceptions.
@@ -130,7 +130,7 @@ class ImageCaptionDataSetBuilder(DataSetBuilder):
         name = content["content"]["image"]["name"]
         caption = content["content"]["caption"]
 
-        file_name = str(self.image_folder / f"{len(self.seen_uuids) + 1}.jpg")
+        file_name = self.image_folder / f"{len(self.seen_uuids) + 1}.jpg"
 
         image_meta_data = {
             "file_name": file_name,

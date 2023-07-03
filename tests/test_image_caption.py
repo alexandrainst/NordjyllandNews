@@ -1,5 +1,7 @@
 """Unit tests for the `image_caption_dataset` module."""
 
+from pathlib import Path
+
 import pytest
 
 from nordjylland_news.image_caption_dataset import ImageCaptionDataSetBuilder
@@ -119,7 +121,7 @@ def test_article_content_image_keys(article_content, key):
                 "download_url": "https://example.com/image.jpg",
                 "name": "example_image.jpg",
                 "caption": "An example image",
-                "file_name": "data/raw/images/train/1.jpg",
+                "file_name": Path("data/raw/images/train/1.jpg"),
             },
         ),
     ],
@@ -159,7 +161,7 @@ def test_get_image_meta_data(image_caption_builder, article, expected_data):
                     "download_url": "https://example.com/image.jpg",
                     "name": "example_image.jpg",
                     "caption": "An example image",
-                    "file_name": "data/raw/images/train/1.jpg",
+                    "file_name": Path("data/raw/images/train/1.jpg"),
                 }
             ],
         ),
@@ -168,4 +170,5 @@ def test_get_image_meta_data(image_caption_builder, article, expected_data):
 def test_get_image_data(image_caption_builder, article, expected_data):
     image_caption_builder.new_data = []
     image_caption_builder.get_image_data(article, download_images=False)
+
     assert image_caption_builder.new_data == expected_data
