@@ -94,7 +94,8 @@ class ImageCaptionDataSetBuilder(DataSetBuilder):
             article (dict):
                 Article data.
             download_images (bool):
-                Whether to download images or not (used to avoid downloading images when testing).
+                Whether to download images or not (used to avoid downloading images when
+                testing). Defaults to True.
         """
         for content in article["content"]:
             if content["type"] == "Image":
@@ -104,7 +105,10 @@ class ImageCaptionDataSetBuilder(DataSetBuilder):
                     data = self._get_image_meta_data(content, article)
                     self.seen_uuids.add(uuid)
                     if download_images:
-                        self.download_image(data["download_url"], data["file_name"])
+                        self.download_image(
+                            download_url=data["download_url"],
+                            file_name=data["file_name"],
+                        )
                     self.new_data.append(data)
 
     def _get_image_meta_data(self, content: dict, article: dict) -> dict:
