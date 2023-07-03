@@ -1,6 +1,10 @@
 defaults:
   - _self_
 
+hydra:
+  run:
+    dir: "."
+
 dirs:
   data: data
   raw: raw
@@ -11,11 +15,13 @@ api_info:
   url: https://public.nord.bazo.dk/v1/articles
   max_per_page: 100
 
-data_set_names:
-  summary_dataset: summary
+dataset_names:
+  summary: summary
   image_caption: image_caption
 
 sleeps:
   short: 5
   medium: 60
   long: 900
+
+testing: False

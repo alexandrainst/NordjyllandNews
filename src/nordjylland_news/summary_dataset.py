@@ -41,10 +41,10 @@ class SummaryDataSetBuilder(DataSetBuilder):
             Length of sleep in seconds.
         dataset_length (int):
             Number of articles in dataset.
-
     """
 
-    def __init__(self, dataset_name: str, cfg: DictConfig) -> None:
+    def __init__(self, cfg: DictConfig) -> None:
+        dataset_name = cfg["dataset_names"]["summary"]
         super().__init__(dataset_name=dataset_name, cfg=cfg)
 
         # Number of articles in dataset
@@ -86,6 +86,7 @@ class SummaryDataSetBuilder(DataSetBuilder):
             self.logger.info(f"{self.dataset_length}/{self.total_articles}")
 
             self.page_increment()
+
             self.sleep()
 
     def get_article_data(self, article: dict) -> Dict:

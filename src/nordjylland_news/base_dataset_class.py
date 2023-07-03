@@ -4,6 +4,7 @@ import logging
 import os
 import time
 from abc import ABC, abstractmethod
+from pathlib import Path
 from typing import List
 
 import requests
@@ -48,13 +49,12 @@ class DataSetBuilder(ABC):
                 Length of sleep in seconds.
         """
         self.dataset_name = dataset_name
-        self.cfg = cfg
-        self.read_cfg()
-
         self.logger = logging.getLogger(self.dataset_name)
 
+        self.read_cfg(cfg)
+
         # Load dataset currently stored on disk, and use it to set current_page.
-        self.dataset = self.load_dataset()
+        self.dataset = self.load_dataset() if not self.testing else []
 
         # Get all uuids in dataset
         self.seen_uuids = set(data["uuid"] for data in self.dataset)
@@ -77,18 +77,20 @@ class DataSetBuilder(ABC):
             str:
                 Data path.
         """
-        dirs = self.cfg["dirs"]
-        data = dirs["data"]
-        raw = dirs["raw"]
-        to_root = "../" * 3  # Just Hydra things
-        data_path = f"{to_root}{data}/{raw}/{self.dataset_name}.jsonl"
+        if self.dataset_name == "test":
+            data_path = f"{self.dataset_name}.jsonl"
+        else:
+            dirs = self.cfg["dirs"]
+            data = dirs["data"]
+            raw = dirs["raw"]
+            data_path = Path(data) / raw / f"{self.dataset_name}.jsonl"
         return data_path
 
     def get_total_articles(self) -> int:
         """Gets total number of articles in the API.
 
         Returns:
-            int:
+            total_articles (int):
                 Total number of articles.
         """
         data = self.send_request(self.articles_api_url)
@@ -100,20 +102,22 @@ class DataSetBuilder(ABC):
         """Builds dataset."""
         pass
 
-    def read_cfg(self) -> None:
+    def read_cfg(self, cfg: DictConfig) -> None:
         """Reads config.
 
         Args:
             cfg (DictConfig):
                 Hydra config.
         """
-        self.max_per_page = self.cfg["api_info"]["max_per_page"]
-        self.articles_api_url = self.cfg["api_info"]["url"]
+        self.max_per_page = cfg["api_info"]["max_per_page"]
+        self.articles_api_url = cfg["api_info"]["url"]
         self.sleep_length = {
-            "short": self.cfg["sleeps"]["short"],
-            "medium": self.cfg["sleeps"]["medium"],
-            "long": self.cfg["sleeps"]["long"],
+            "short": cfg["sleeps"]["short"],
+            "medium": cfg["sleeps"]["medium"],
+            "long": cfg["sleeps"]["long"],
         }
+        self.testing = cfg["testing"]
+        self.cfg = cfg
 
     def get_page_with_articles(self, page: int) -> List[dict]:
         """Gets page with articles data from the API.
@@ -160,7 +164,6 @@ class DataSetBuilder(ABC):
             bool:
                 True if dataset is done, False otherwise.
         """
-
         return not bool(articles)
 
     def sleep(self) -> None:

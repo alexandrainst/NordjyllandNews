@@ -42,6 +42,10 @@ class ImageCaptionDataSetBuilder(DataSetBuilder):
             New data to append to dataset.
     """
 
+    def __init__(self, cfg: DictConfig) -> None:
+        dataset_name = cfg["dataset_names"]["image_caption"]
+        super().__init__(dataset_name=dataset_name, cfg=cfg)
+
     def build_dataset(self) -> None:
         """Builds image caption dataset.
 
@@ -76,6 +80,7 @@ class ImageCaptionDataSetBuilder(DataSetBuilder):
             )
 
             self.page_increment()
+
             self.sleep()
 
     def get_image_data(self, article: dict) -> None:
