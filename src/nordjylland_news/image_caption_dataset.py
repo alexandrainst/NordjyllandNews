@@ -87,7 +87,7 @@ class ImageCaptionDataSetBuilder(DataSetBuilder):
 
             self.sleep()
 
-    def get_image_data(self, article: dict, download_images=True) -> None:
+    def get_image_data(self, article: dict, download_images: bool = True) -> None:
         """Gets image meta data for every image with a caption in the article.
 
         Args:
