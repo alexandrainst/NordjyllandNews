@@ -10,6 +10,7 @@ dirs:
   raw: raw
   processed: processed
   final: final
+  image_folder: data/raw/images/train
 
 api_info:
   url: https://public.nord.bazo.dk/v1/articles

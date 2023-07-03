@@ -93,7 +93,8 @@ class DataSetBuilder(ABC):
             total_articles (int):
                 Total number of articles.
         """
-        data = self.send_request(self.articles_api_url)
+        response = self.send_request(self.articles_api_url)
+        data = response.json()
         total_articles = data["meta"]["total"]
         return total_articles
 
@@ -132,7 +133,8 @@ class DataSetBuilder(ABC):
         """
 
         url = f"{self.articles_api_url}?page[number]={page}&page[size]={self.max_per_page}"
-        data = self.send_request(url)
+        response = self.send_request(url)
+        data = response.json()
         articles = data["data"]
         return articles
 
@@ -174,18 +176,16 @@ class DataSetBuilder(ABC):
         """Increments current page."""
         self.current_page += 1
 
-    def send_request(self, url: str) -> dict:
+    def send_request(self, url: str) -> requests.Response:
         """Sends request.
 
         Args:
             url (str):
                 Url to send request to.
-            headers (dict):
-                Headers to send with request.
 
         Returns:
-            dict:
-                Response data.
+            requests.Response:
+                Response object.
         """
         while True:
             try:
@@ -199,8 +199,7 @@ class DataSetBuilder(ABC):
                         f"Request failed for url: {url} with status code: {response.status_code}"
                     )
                 else:
-                    data = response.json()
                     break
             except requests.RequestException:
                 self.logger.info(f"Request failed for url: {url}")
-        return data
+        return response
