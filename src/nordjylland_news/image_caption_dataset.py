@@ -109,13 +109,14 @@ class ImageCaptionDataSetBuilder(DataSetBuilder):
                 ):
                     data = self._get_image_meta_data(content, article)
                     self.seen_uuids.add(uuid)
+                    image_downloaded = False
                     if download_images:
                         image_downloaded = self.download_image(
                             download_url=data["download_url"],
                             file_name=data["file_name"],
                         )
-                        if image_downloaded:
-                            self.new_data.append(data)
+                    if image_downloaded or self.testing:
+                        self.new_data.append(data)
 
     def _get_image_meta_data(self, content: dict, article: dict) -> dict:
         """Extract image meta data.
