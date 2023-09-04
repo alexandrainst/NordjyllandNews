@@ -137,7 +137,6 @@ class ImageCaptionDataSetBuilder(DataSetBuilder):
 
         uuid = content["content"]["image_uuid"]
         download_url = content["content"]["image"]["download_url"]
-        name = content["content"]["image"]["name"]
         caption = content["content"]["caption"]
 
         file_name = self.image_folder / f"{len(self.seen_uuids) + 1}.jpg"
@@ -148,7 +147,6 @@ class ImageCaptionDataSetBuilder(DataSetBuilder):
             "canonical": canonical,
             "uuid": uuid,
             "download_url": download_url,
-            "name": name,
             "caption": caption,
         }
         return image_meta_data
