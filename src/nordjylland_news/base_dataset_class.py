@@ -5,7 +5,7 @@ import os
 import time
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import List, Union
+from typing import List
 
 import requests
 from omegaconf import DictConfig
