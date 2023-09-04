@@ -6,4 +6,5 @@ HEADERS = {"Accept": "application/json", "Authorization": "centered"}
 # Status codes
 STATUS_CODE_OK = 200
 TOO_MANY_REQUESTS = 429
-ERROR_500 = 500
+INTERNAL_SERVER_ERROR = 500
+SERVICE_UNAVAILABLE = 503

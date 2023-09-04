@@ -1,5 +1,6 @@
 """Class that builds the image caption dataset."""
 
+import time
 from pathlib import Path
 from typing import Dict, List
 
@@ -101,15 +102,20 @@ class ImageCaptionDataSetBuilder(DataSetBuilder):
             if content["type"] == "Image":
                 uuid = content["content"]["image_uuid"]
                 caption = content["content"]["caption"]
-                if uuid not in self.seen_uuids and caption is not None:
+                if (
+                    uuid not in self.seen_uuids
+                    and caption is not None
+                    and len(caption) > 1
+                ):
                     data = self._get_image_meta_data(content, article)
                     self.seen_uuids.add(uuid)
                     if download_images:
-                        self.download_image(
+                        image_downloaded = self.download_image(
                             download_url=data["download_url"],
                             file_name=data["file_name"],
                         )
-                    self.new_data.append(data)
+                        if image_downloaded:
+                            self.new_data.append(data)
 
     def _get_image_meta_data(self, content: dict, article: dict) -> dict:
         """Extract image meta data.
@@ -147,7 +153,7 @@ class ImageCaptionDataSetBuilder(DataSetBuilder):
         }
         return image_meta_data
 
-    def download_image(self, download_url: str, file_name: str) -> None:
+    def download_image(self, download_url: str, file_name: str) -> bool:
         """Downloads image.
 
         Args:
@@ -155,7 +161,27 @@ class ImageCaptionDataSetBuilder(DataSetBuilder):
                 URL to image.
             file_name (str):
                 Name of file to save image to.
+
+        Returns:
+            bool:
+                Whether image was downloaded or not.
         """
-        response = self.send_request(download_url)
-        with open(file_name, "wb") as f:
-            f.write(response.content)
+        response = self.send_request(
+            download_url, n_requests=self.cfg["n_requests_image"]
+        )
+        if not response.status_code:
+            return False
+
+        # Short sleep after every image request.
+        time.sleep(self.sleep_length["short"])
+
+        # Store image on disk
+        try:
+            with open(file_name, "wb") as f:
+                f.write(response.content)
+                return True
+        except Exception as e:
+            self.logger.error(
+                f"Error downloading image with download_url: {download_url}. Error: {e}"
+            )
+            return False
