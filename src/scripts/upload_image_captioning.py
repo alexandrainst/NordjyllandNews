@@ -1,3 +1,10 @@
+"""Upload the image captioning dataset to the HuggingFace Hub.
+
+Usage:
+    >>> python src/scripts/upload_image_captioning.py
+"""
+
+
 from datasets import load_dataset
 
 DATASET_PATH = (
