@@ -201,6 +201,8 @@ class DataSetBuilder(ABC):
         Args:
             url (str):
                 Url to send request to.
+            n_requests (int):
+                Number of requests to send, before giving up.
 
         Returns:
             requests.Response:
