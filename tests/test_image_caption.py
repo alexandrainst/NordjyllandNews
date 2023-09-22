@@ -107,7 +107,6 @@ def test_article_content_image_keys(article_content, key):
                             "image_uuid": "456",
                             "image": {
                                 "download_url": "https://example.com/image.jpg",
-                                "name": "example_image.jpg",
                             },
                             "caption": "An example image",
                         },
@@ -119,7 +118,6 @@ def test_article_content_image_keys(article_content, key):
                 "canonical": "https://example.com/article",
                 "uuid": "456",
                 "download_url": "https://example.com/image.jpg",
-                "name": "example_image.jpg",
                 "caption": "An example image",
                 "file_name": Path("data/raw/images/train/1.jpg"),
             },
@@ -146,7 +144,6 @@ def test_get_image_meta_data(image_caption_builder, article, expected_data):
                             "image_uuid": "456",
                             "image": {
                                 "download_url": "https://example.com/image.jpg",
-                                "name": "example_image.jpg",
                             },
                             "caption": "An example image",
                         },
@@ -159,7 +156,6 @@ def test_get_image_meta_data(image_caption_builder, article, expected_data):
                     "canonical": "https://example.com/article",
                     "uuid": "456",
                     "download_url": "https://example.com/image.jpg",
-                    "name": "example_image.jpg",
                     "caption": "An example image",
                     "file_name": Path("data/raw/images/train/1.jpg"),
                 }

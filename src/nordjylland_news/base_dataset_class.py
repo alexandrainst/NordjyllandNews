@@ -9,8 +9,21 @@ from typing import List
 
 import requests
 from omegaconf import DictConfig
+from requests import Response
 
-from .constants import ERROR_500, HEADERS, STATUS_CODE_OK, TOO_MANY_REQUESTS
+from .constants import (
+    HEADERS,
+    INTERNAL_SERVER_ERROR,
+    SERVICE_UNAVAILABLE,
+    STATUS_CODE_OK,
+    TOO_MANY_REQUESTS,
+)
+from .exceptions import (
+    InternalServerErrorException,
+    ServiceUnavailableException,
+    StatusCodeException,
+    TooManyRequestsException,
+)
 from .utils import init_jsonl, load_jsonl
 
 
@@ -94,6 +107,9 @@ class DataSetBuilder(ABC):
                 Total number of articles.
         """
         response = self.send_request(self.articles_api_url)
+        if not response.status_code:
+            return 0
+
         data = response.json()
         total_articles = data["meta"]["total"]
         return total_articles
@@ -134,6 +150,9 @@ class DataSetBuilder(ABC):
 
         url = f"{self.articles_api_url}?page[number]={page}&page[size]={self.max_per_page}"
         response = self.send_request(url)
+        if not response.status_code:
+            return []
+
         data = response.json()
         articles = data["data"]
         return articles
@@ -176,30 +195,70 @@ class DataSetBuilder(ABC):
         """Increments current page."""
         self.current_page += 1
 
-    def send_request(self, url: str) -> requests.Response:
+    def send_request(self, url: str, n_requests: int = 100) -> requests.Response:
         """Sends request.
 
         Args:
             url (str):
                 Url to send request to.
+            n_requests (int):
+                Number of requests to send, before giving up.
 
         Returns:
             requests.Response:
-                Response object.
+                Response object - empty if request failed.
         """
-        while True:
+        for _ in range(n_requests):
             try:
-                response = requests.get(url, headers=HEADERS)
+                response = requests.get(
+                    url, headers=HEADERS, timeout=self.cfg["timeout"]
+                )
+
                 if response.status_code == TOO_MANY_REQUESTS:
-                    time.sleep(self.sleep_length["short"])
-                elif response.status_code == ERROR_500:
-                    time.sleep(self.sleep_length["long"])
+                    raise TooManyRequestsException(
+                        f"Request failed for url: {url} because of too many requests"
+                    )
+
+                elif response.status_code == SERVICE_UNAVAILABLE:
+                    raise ServiceUnavailableException(
+                        f"Request failed for url: {url} because of service being unavailable"
+                    )
+
+                elif response.status_code == INTERNAL_SERVER_ERROR:
+                    raise InternalServerErrorException(
+                        f"Request failed for url: {url} because of internal server error"
+                    )
+
                 elif response.status_code != STATUS_CODE_OK:
-                    raise Exception(
+                    raise StatusCodeException(
                         f"Request failed for url: {url} with status code: {response.status_code}"
                     )
+
                 else:
-                    break
+                    return response
+
             except requests.RequestException:
                 self.logger.info(f"Request failed for url: {url}")
-        return response
+                time.sleep(self.sleep_length["medium"])
+
+            except TooManyRequestsException as e:
+                self.logger.info(e)
+                time.sleep(self.sleep_length["long"])
+
+            except ServiceUnavailableException as e:
+                self.logger.info(e)
+                time.sleep(self.sleep_length["long"])
+
+            except InternalServerErrorException as e:
+                self.logger.info(e)
+                time.sleep(self.sleep_length["long"])
+
+            except StatusCodeException as e:
+                self.logger.info(e)
+                time.sleep(self.sleep_length["medium"])
+
+        self.logger.info(
+            f"Request failed for url: {url} after {n_requests} requests. Skipping this request."
+        )
+
+        return Response()

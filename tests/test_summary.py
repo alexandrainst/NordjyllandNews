@@ -36,7 +36,7 @@ def article(articles):
     ],
 )
 def test_article_keys(article, key):
-    assert article[key]
+    assert key in article
 
 
 @pytest.fixture(scope="module")

@@ -71,8 +71,8 @@ class SummaryDataSetBuilder(DataSetBuilder):
                 for article in articles:
                     uuid = article["uuid"]
 
-                    # If article uuid is not seen, add it to seen uuids and process article.
-                    if uuid not in self.seen_uuids:
+                    # If article is not seen before and has a summary, add it to dataset.
+                    if uuid not in self.seen_uuids and article["summary"] is not None:
                         self.seen_uuids.add(uuid)
                         self.dataset_length += 1
 

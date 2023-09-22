@@ -26,3 +26,6 @@ sleeps:
   long: 900
 
 testing: False
+timeout: 60
+n_requests_image: 2
+
